@@ -26,12 +26,12 @@ def db_query(query):
     cursor.execute(query)
     response = cursor.fetchall()
 
-    print(" db_query - Raw output:", response)      # raw output for testing
+    # print(" db_query - Raw output:", response, "\n\n")      # raw output for testing
 
     conn.close()
     return response
 
-def query1(response = "*** Error:  No response ***\n\n"):       # optional arg
+def query1(response = "*** Error:  No response ***\n\n"):       # optional param
     """1. What are the most popular three articles of all time? Which articles
     have been accessed the most? Present this information as a sorted list with
     the most popular article at the top."""
@@ -39,9 +39,8 @@ def query1(response = "*** Error:  No response ***\n\n"):       # optional arg
     print("1. What are the most popular three articles of all time? Which articles have been accessed the most?\n")
 
     query = "SELECT title FROM articles LIMIT 10;"
-    db_query(query)
 
-    print(" query1 - Raw output:", response)      # raw output for testing
+    print(" query1 - Raw output:", db_query(query), "\n\n")      # raw output for testing
 
 
 if __name__ == '__main__':
