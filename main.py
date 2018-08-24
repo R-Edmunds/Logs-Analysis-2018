@@ -32,9 +32,15 @@ def query1():
     have been accessed the most? Present this information as a sorted list with
     the most popular article at the top."""
 
+    # log.path is first 3 words of title with hyphen seperator
+
     print("1. What are the most popular three articles of all time? Which articles have been accessed the most?\n")
 
-    query = "SELECT title FROM articles LIMIT 10;"
+    # query = "SELECT title FROM articles LIMIT 10;"
+    # query = "SELECT articles.title FROM articles;"
+    # query = "SELECT articles.title FROM articles LIMIT 10;"
+    # query = "SELECT log.path FROM log WHERE log.path LIKE '/article/%' LIMIT 10;"   # logs with artcle in path
+    query = "SELECT COUNT(log.path) AS hits, log.path FROM log GROUP BY log.path ORDER BY hits DESC LIMIT 5;"   # count unique paths in article
 
     print(" query1 - Raw output:", db_query(query), "\n\n")      # raw output for testing
 
