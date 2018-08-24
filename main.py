@@ -22,16 +22,12 @@ def db_query(query):
     """This function receives SQL statements and executes them"""
     conn = psycopg2.connect("dbname=news")     # connect to db "news" on localhost
     cursor = conn.cursor()      # assign conn.cursor() object to var, "cursor"
+    cursor.execute(query)       # run passed sql query
+    response = cursor.fetchall()        # fetch results, as dict
+    conn.close()        # close connection
+    return response     # return response dict
 
-    cursor.execute(query)
-    response = cursor.fetchall()
-
-    # print(" db_query - Raw output:", response, "\n\n")      # raw output for testing
-
-    conn.close()
-    return response
-
-def query1(response = "*** Error:  No response ***\n\n"):       # optional param
+def query1():
     """1. What are the most popular three articles of all time? Which articles
     have been accessed the most? Present this information as a sorted list with
     the most popular article at the top."""
