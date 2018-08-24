@@ -42,7 +42,12 @@ def query1():
     # query = "SELECT log.path FROM log WHERE log.path LIKE '/article/%' LIMIT 10;"   # logs with artcle in path
     query = "SELECT COUNT(log.path) AS hits, log.path FROM log GROUP BY log.path ORDER BY hits DESC LIMIT 5;"   # count unique paths in article
 
-    print(" query1 - Raw output:", db_query(query), "\n\n")      # raw output for testing
+    # print(" query1 - Raw output:", db_query(query), "\n\n")      # raw output for testing
+
+    output = db_query(query)
+
+    for i, j in enumerate(output):
+        print("Title: '{1}'  --  {0} views".format(*j))
 
 
 if __name__ == '__main__':
