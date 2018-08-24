@@ -48,9 +48,11 @@ def query1():
     output = db_query(query)
 
     for i, j in enumerate(output):
-        """Convert tuple to list, format "path" in list. Print."""
+        """Convert tuple to list to allow writing. Format "path" and add comma
+        seperator to "hits". Print output."""
         j = list(j)
         j[1] = j[1].replace("/article/", "").replace("-", " ").title()
+        j[0] = str(format(j[0], ',d'))
         print("  Title: '{1}'  --  {0} views".format(*j))
 
     print()
