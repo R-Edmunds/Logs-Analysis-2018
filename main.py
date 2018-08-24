@@ -48,8 +48,20 @@ def query1():
     output = db_query(query)
 
     for i, j in enumerate(output):
+        """Convert tuple to list, format "path" in list. Print."""
+        j = list(j)
+        j[1] = j[1].replace("/article/", "").replace("-", " ").title()
         print("  Title: '{1}'  --  {0} views".format(*j))
+
     print()
+
+# def resolve():
+#     """Resolve log.path to articles.name"""
+#     query = "SELECT log.path, articles.title FROM log, articles RIGHT JOIN log.path ON articles.title WHERE
+#
+#     output = db_query(query)
+#     print(output)
+
 
 
 if __name__ == '__main__':
