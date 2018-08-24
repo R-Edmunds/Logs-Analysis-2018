@@ -19,13 +19,17 @@
 import psycopg2, os
 
 def db_query(query):
-    psycopg2.connect("dbname=news")     # connect to db "news" on localhost
+    """This function receives SQL statements and executes them"""
+    conn = psycopg2.connect("dbname=news")     # connect to db "news" on localhost
     cursor = conn.cursor()      # assign conn.cursor() object to var, "cursor"
 
     cursor.execute(query)
+    response = cursor.fetchall()
 
-    conn.commit()
+    print("Raw output:", response)      # raw output for testing
+
     conn.close()
+    # return reversed(output)
 
 def query1():
     """1. What are the most popular three articles of all time? Which articles
@@ -35,9 +39,12 @@ def query1():
     print("1. What are the most popular three articles of all time? Which articles have been accessed the most?\n")
 
 
+
 if __name__ == '__main__':
-    os.system("clear")
+    os.system("clear")      # clear console on unix-like systems
     print("\n-----------------------------------\n" +
         "-  Logs Analysis - Robin Edmunds  -\n" +
         "-----------------------------------\n")
     query1()
+    # test_query = "SELECT * FROM authors LIMIT 10;"
+    # db_query(test_query)
