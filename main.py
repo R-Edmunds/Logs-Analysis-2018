@@ -16,7 +16,7 @@
 # "Baltimore Ravens Defeat Rhode Island Shoggoths" — 915 views
 # "Political Scandal Ends In Political Scandal" — 553 views
 
-import psycopg2
+import psycopg2, os
 
 def db_query(query):
     psycopg2.connect("dbname=news")     # connect to db "news" on localhost
@@ -28,8 +28,16 @@ def db_query(query):
     conn.close()
 
 def query1():
-    print("Query 1")
+    """1. What are the most popular three articles of all time? Which articles
+    have been accessed the most? Present this information as a sorted list with
+    the most popular article at the top."""
+
+    print("1. What are the most popular three articles of all time? Which articles have been accessed the most?\n")
 
 
 if __name__ == '__main__':
-    main()
+    os.system("clear")
+    print("\n-----------------------------------\n" +
+        "-  Logs Analysis - Robin Edmunds  -\n" +
+        "-----------------------------------\n")
+    query1()
