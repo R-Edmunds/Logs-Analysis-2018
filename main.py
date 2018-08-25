@@ -44,10 +44,18 @@ def query1():
         j[0] = str(format(j[0], ',d'))
         print("    Title:  '{1}'  -  {0} views".format(*j))
 
+def query2():
+    """2. Who are the most popular article authors of all time? That is, when
+    you sum up all of the articles each author has written, which authors get
+    the most page views? Present this as a sorted list with the most popular
+    author at the top."""
+    print("Query2 func")
+
 if __name__ == '__main__':
     os.system("clear")      # clear console on unix-like systems
     print("\n-----------------------------------\n"
         + "-  Logs Analysis - Robin Edmunds  -\n"
         + "-----------------------------------\n")
-    query1()
+    # query1()
+    query2()
     print()
