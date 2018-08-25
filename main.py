@@ -49,7 +49,24 @@ def query2():
     you sum up all of the articles each author has written, which authors get
     the most page views? Present this as a sorted list with the most popular
     author at the top."""
-    print("Query2 func")
+
+    print("2. Who are the most popular article authors of all time?\n")
+
+    # query = """SELECT COUNT(log.path) AS hits, log.path FROM log
+    #             WHERE log.path LIKE '/article/%'
+    #             AND log.status = '200 OK' AND log.method = 'GET'
+    #             GROUP BY log.path ORDER BY hits DESC LIMIT 3;"""
+    #
+    # response = db_query(query)
+    #
+    # for i, j in enumerate(response):
+    #     """Convert tuple to list to allow writing. Format "path" and add comma
+    #     seperator to "hits". Print output."""
+    #     j = list(j)
+    #     j[1] = j[1].replace("/article/", "").replace("-", " ").title()
+    #     j[0] = str(format(j[0], ',d'))
+    #     print("    Title:  '{1}'  -  {0} views".format(*j))
+
 
 if __name__ == '__main__':
     os.system("clear")      # clear console on unix-like systems
