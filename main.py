@@ -34,9 +34,9 @@ def query1():
                 AND log.status = '200 OK' AND log.method = 'GET'
                 GROUP BY log.path ORDER BY hits DESC LIMIT 3;"""
 
-    resonse = db_query(query)
+    response = db_query(query)
 
-    for i, j in enumerate(resonse):
+    for i, j in enumerate(response):
         """Convert tuple to list to allow writing. Format "path" and add comma
         seperator to "hits". Print output."""
         j = list(j)
