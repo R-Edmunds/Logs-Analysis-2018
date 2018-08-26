@@ -8,7 +8,9 @@
 # - psycopg2 2.5.4
 # - git version 2.1.4
 
-import psycopg2, os
+import datetime
+import os
+import psycopg2
 
 def db_query(query):
     """This function receives SQL statements and executes them on live DB."""
@@ -82,34 +84,45 @@ def query3():
     """3. On which days did more than 1% of requests lead to errors? The log
     table includes a column status that indicates the HTTP status code that the
     news site sent to the user's browser. (Refer to this lesson for more
-    information about the idea of HTTP status codes.)"""
+    information about the idea of HTTP status codes.)
+
+    This query makes use of SQL VIEWS, documented in README.md"""
 
     print("3. On which days did more than 1% of requests lead to errors?\n")
 
     query = """
     SELECT view_daily_requests.date,
         CAST(view_daily_errors.daily_errors AS REAL) /
-        CAST(view_daily_requests.daily_requests AS REAL) * 100 AS pc
+        CAST(view_daily_requests.daily_requests AS REAL) AS pc
     FROM view_daily_requests
-    JOIN view_daily_errors
-    ON view_daily_requests.date = view_daily_errors.date
+        JOIN view_daily_errors
+        ON view_daily_requests.date = view_daily_errors.date
     WHERE CAST(view_daily_errors.daily_errors AS REAL) /
-    CAST(view_daily_requests.daily_requests AS REAL) * 100 >= 1.0
+    CAST(view_daily_requests.daily_requests AS REAL) >= 0.01
     ORDER BY pc DESC;
     """
 
     response = db_query(query)
 
-    print(response)
+    for i, j in enumerate(response):
+        """Convert tuple to list to allow writing. Format "pc" as percentage,
+        make date readable. Print output.
+
+        July 29, 2016 — 2.5% errors"""
+        j = list(j)
+        j[0] = j[0].strftime("%d %B %Y")
+        j[1] = str(format(j[1], '%'))
+        print("    Date:  {}  -  {} errors".format(*j))
+
 
 if __name__ == '__main__':
     os.system("clear")      # clear console on unix-like systems
     print("\n-----------------------------------\n"
         + "-  Logs Analysis - Robin Edmunds  -\n"
         + "-----------------------------------\n")
-    # query1()
-    # print("\n\n")
-    # query2()
-    # print("\n\n")
+    query1()
+    print("\n\n")
+    query2()
+    print("\n\n")
     query3()
     print("\n\n")
