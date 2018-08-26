@@ -77,5 +77,5 @@ if __name__ == '__main__':
         + "-  Logs Analysis - Robin Edmunds  -\n"
         + "-----------------------------------\n")
     # query1()
+    print("\n\n")
     query2()
-    print()
