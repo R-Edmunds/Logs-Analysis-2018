@@ -1,13 +1,7 @@
 #!/usr/bin/python3
 #
-# Logs Analysis project - Robin Edmunds
+# Logs Analysis project - Robin Edmunds 2018
 #
-# Dev env Debian/Jessie vagrant/libvirt vm with following software version: -
-# - Python 3.4.2
-# - pip3 18
-# - psycopg2 2.5.4
-# - git version 2.1.4
-
 import datetime
 import os
 import psycopg2
@@ -24,27 +18,27 @@ def db_query(query):
 def query1():
     """1. What are the most popular three articles of all time? Which articles
     have been accessed the most? Present this information as a sorted list with
-    the most popular article at the top.
-
-    Define and submit SQL query. Format and print respone."""
+    the most popular article at the top."""
 
     print("1. What are the most popular three articles of all time? Which "
         + "articles have been accessed the most?\n")
 
-    query = """SELECT articles.title, subq.hits FROM articles
+    query = """
+        SELECT articles.title, subq.hits FROM articles
         LEFT JOIN
             (SELECT COUNT(log.path) AS hits, log.path FROM log
             WHERE log.path LIKE '/article/%'
             AND log.status = '200 OK' AND log.method = 'GET'
             GROUP BY log.path) AS subq
         ON subq.path LIKE '/article/'||articles.slug
-        ORDER BY subq.hits DESC LIMIT 3;"""
+        ORDER BY subq.hits DESC LIMIT 3;
+        """
 
     response = db_query(query)
 
     for i, j in enumerate(response):
-        """Convert tuple to list to allow writing. Format "hits" with comma
-        seperator. Print output."""
+        # Convert tuple to list to allow writing. Format "hits" with comma
+        # seperator. Print output.
         j = list(j)
         j[1] = str(format(j[1], ',d'))
         print("    Title:  '{}'  -  {} views".format(*j))
@@ -57,7 +51,8 @@ def query2():
 
     print("2. Who are the most popular article authors of all time?\n")
 
-    query = """SELECT authors.name, subq_author.hits FROM authors
+    query = """
+        SELECT authors.name, subq_author.hits FROM authors
         LEFT JOIN
             (SELECT articles.author, CAST(SUM(subq_article.hits) AS INTEGER)
             AS hits FROM articles
@@ -69,13 +64,14 @@ def query2():
             ON subq_article.path LIKE '/article/'||articles.slug
             GROUP BY articles.author) AS subq_author
         ON authors.id = subq_author.author
-        ORDER BY subq_author.hits DESC;"""
+        ORDER BY subq_author.hits DESC;
+        """
 
     response = db_query(query)
 
     for i, j in enumerate(response):
-        """Convert tuple to list to allow writing. Format "hits" with comma
-        seperator. Print output."""
+        # Convert tuple to list to allow writing. Format "hits" with comma
+        # seperator. Print output.
         j = list(j)
         j[1] = str(format(j[1], ',d'))
         print("    Author:  '{}'  -  {} views".format(*j))
@@ -91,24 +87,22 @@ def query3():
     print("3. On which days did more than 1% of requests lead to errors?\n")
 
     query = """
-    SELECT view_daily_requests.date,
-        CAST(view_daily_errors.daily_errors AS REAL) /
-        CAST(view_daily_requests.daily_requests AS REAL) AS pc
-    FROM view_daily_requests
-        JOIN view_daily_errors
-        ON view_daily_requests.date = view_daily_errors.date
-    WHERE CAST(view_daily_errors.daily_errors AS REAL) /
-    CAST(view_daily_requests.daily_requests AS REAL) >= 0.01
-    ORDER BY pc DESC;
-    """
+        SELECT view_daily_requests.date,
+            CAST(view_daily_errors.daily_errors AS REAL) /
+            CAST(view_daily_requests.daily_requests AS REAL) AS pc
+        FROM view_daily_requests
+            JOIN view_daily_errors
+            ON view_daily_requests.date = view_daily_errors.date
+        WHERE CAST(view_daily_errors.daily_errors AS REAL) /
+        CAST(view_daily_requests.daily_requests AS REAL) >= 0.01
+        ORDER BY pc DESC;
+        """
 
     response = db_query(query)
 
     for i, j in enumerate(response):
-        """Convert tuple to list to allow writing. Format "pc" as percentage,
-        make date readable. Print output.
-
-        July 29, 2016 — 2.5% errors"""
+        # Convert tuple to list to allow writing. Format "pc" as percentage,
+        # make date readable. Print output.
         j = list(j)
         j[0] = j[0].strftime("%d %B %Y")
         j[1] = str(format(j[1], '%'))
@@ -116,7 +110,7 @@ def query3():
 
 
 if __name__ == '__main__':
-    os.system("clear")      # clear console on unix-like systems
+    os.system("clear")  # clear console on unix-like systems
     print("\n-----------------------------------\n"
         + "-  Logs Analysis - Robin Edmunds  -\n"
         + "-----------------------------------\n")
