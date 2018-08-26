@@ -78,6 +78,29 @@ def query2():
         j[1] = str(format(j[1], ',d'))
         print("    Author:  '{}'  -  {} views".format(*j))
 
+def query3():
+    """3. On which days did more than 1% of requests lead to errors? The log
+    table includes a column status that indicates the HTTP status code that the
+    news site sent to the user's browser. (Refer to this lesson for more
+    information about the idea of HTTP status codes.)"""
+
+    print("3. On which days did more than 1% of requests lead to errors?\n")
+
+    query = """
+    SELECT view_daily_requests.date,
+        CAST(view_daily_errors.daily_errors AS REAL) /
+        CAST(view_daily_requests.daily_requests AS REAL) * 100 AS pc
+    FROM view_daily_requests
+    JOIN view_daily_errors
+    ON view_daily_requests.date = view_daily_errors.date
+    WHERE CAST(view_daily_errors.daily_errors AS REAL) /
+    CAST(view_daily_requests.daily_requests AS REAL) * 100 >= 1.0
+    ORDER BY pc DESC;
+    """
+
+    response = db_query(query)
+
+    print(response)
 
 if __name__ == '__main__':
     os.system("clear")      # clear console on unix-like systems
@@ -85,6 +108,8 @@ if __name__ == '__main__':
         + "-  Logs Analysis - Robin Edmunds  -\n"
         + "-----------------------------------\n")
     # query1()
-    print("\n\n")
-    query2()
+    # print("\n\n")
+    # query2()
+    # print("\n\n")
+    query3()
     print("\n\n")
