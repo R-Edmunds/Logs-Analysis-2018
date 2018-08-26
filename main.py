@@ -29,20 +29,23 @@ def query1():
     print("1. What are the most popular three articles of all time? Which "
         + "articles have been accessed the most?\n")
 
-    query = """SELECT COUNT(log.path) AS hits, log.path FROM log
+    query = """SELECT articles.title, subq.hits FROM articles
+            LEFT JOIN
+                (SELECT COUNT(log.path) AS hits, log.path FROM log
                 WHERE log.path LIKE '/article/%'
                 AND log.status = '200 OK' AND log.method = 'GET'
-                GROUP BY log.path ORDER BY hits DESC LIMIT 3;"""
+                GROUP BY log.path) AS subq
+            ON subq.path LIKE '/article/'||articles.slug
+            ORDER BY subq.hits DESC LIMIT 3;"""
 
     response = db_query(query)
 
     for i, j in enumerate(response):
-        """Convert tuple to list to allow writing. Format "path" and add comma
-        seperator to "hits". Print output."""
+        """Convert tuple to list to allow writing. Format "hits" with comma
+        seperator. Print output."""
         j = list(j)
-        j[1] = j[1].replace("/article/", "").replace("-", " ").title()
-        j[0] = str(format(j[0], ',d'))
-        print("    Title:  '{1}'  -  {0} views".format(*j))
+        j[1] = str(format(j[1], ',d'))
+        print("    Title:  '{}'  -  {} views".format(*j))
 
 if __name__ == '__main__':
     os.system("clear")      # clear console on unix-like systems
