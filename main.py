@@ -30,13 +30,13 @@ def query1():
         + "articles have been accessed the most?\n")
 
     query = """SELECT articles.title, subq.hits FROM articles
-            LEFT JOIN
-                (SELECT COUNT(log.path) AS hits, log.path FROM log
-                WHERE log.path LIKE '/article/%'
-                AND log.status = '200 OK' AND log.method = 'GET'
-                GROUP BY log.path) AS subq
-            ON subq.path LIKE '/article/'||articles.slug
-            ORDER BY subq.hits DESC LIMIT 3;"""
+        LEFT JOIN
+            (SELECT COUNT(log.path) AS hits, log.path FROM log
+            WHERE log.path LIKE '/article/%'
+            AND log.status = '200 OK' AND log.method = 'GET'
+            GROUP BY log.path) AS subq
+        ON subq.path LIKE '/article/'||articles.slug
+        ORDER BY subq.hits DESC LIMIT 3;"""
 
     response = db_query(query)
 
@@ -55,20 +55,28 @@ def query2():
 
     print("2. Who are the most popular article authors of all time?\n")
 
-    # query = """SELECT COUNT(log.path) AS hits, log.path FROM log
-    #             WHERE log.path LIKE '/article/%'
-    #             AND log.status = '200 OK' AND log.method = 'GET'
-    #             GROUP BY log.path ORDER BY hits DESC LIMIT 3;"""
-    #
-    # response = db_query(query)
-    #
-    # for i, j in enumerate(response):
-    #     """Convert tuple to list to allow writing. Format "path" and add comma
-    #     seperator to "hits". Print output."""
-    #     j = list(j)
-    #     j[1] = j[1].replace("/article/", "").replace("-", " ").title()
-    #     j[0] = str(format(j[0], ',d'))
-    #     print("    Title:  '{1}'  -  {0} views".format(*j))
+    query = """SELECT authors.name, subq_author.hits FROM authors
+        LEFT JOIN
+            (SELECT articles.author, CAST(SUM(subq_article.hits) AS INTEGER)
+            AS hits FROM articles
+            LEFT JOIN
+                (SELECT COUNT(log.path) AS hits, log.path FROM log
+                WHERE log.path LIKE '/article/%'
+                AND log.status = '200 OK' AND log.method = 'GET'
+                GROUP BY log.path) AS subq_article
+            ON subq_article.path LIKE '/article/'||articles.slug
+            GROUP BY articles.author) AS subq_author
+        ON authors.id = subq_author.author
+        ORDER BY subq_author.hits DESC;"""
+
+    response = db_query(query)
+
+    for i, j in enumerate(response):
+        """Convert tuple to list to allow writing. Format "hits" with comma
+        seperator. Print output."""
+        j = list(j)
+        j[1] = str(format(j[1], ',d'))
+        print("    Author:  '{}'  -  {} views".format(*j))
 
 
 if __name__ == '__main__':
@@ -79,3 +87,4 @@ if __name__ == '__main__':
     # query1()
     print("\n\n")
     query2()
+    print("\n\n")
