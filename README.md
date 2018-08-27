@@ -1,9 +1,9 @@
-# Logs Analysis project - Robin Edmunds 2018
+# Logs Analysis Project - Robin Edmunds 2018
 
 ## Environment
 
 Development environment is an __Ubuntu 18.04__ host running __Vagrant/libvirt__ with
-__debian/jessie64__ box.
+__debian/jessie64 (v8.11.0)__ box.
 
 ### Versions
 - psql 9.4.18
@@ -32,4 +32,4 @@ CREATE VIEW view_daily_requests AS
         FROM log) AS subq_daily_requests
     GROUP BY subq_daily_requests.date
     ORDER BY subq_daily_requests.date;
-    ```
+```
