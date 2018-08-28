@@ -6,6 +6,7 @@ import datetime
 import os
 import psycopg2
 
+
 def db_query(query):
     """This function receives SQL statements and executes them on live DB."""
     conn = psycopg2.connect("dbname=news")
@@ -15,13 +16,14 @@ def db_query(query):
     conn.close()
     return response
 
+
 def query1():
     """1. What are the most popular three articles of all time? Which articles
     have been accessed the most? Present this information as a sorted list with
     the most popular article at the top."""
 
-    print("1. What are the most popular three articles of all time? Which "
-        + "articles have been accessed the most?\n")
+    print("1. What are the most popular three articles of all time? Which " +
+          "articles have been accessed the most?\n")
 
     query = """
         SELECT articles.title, subq.hits FROM articles
@@ -42,6 +44,7 @@ def query1():
         j = list(j)
         j[1] = str(format(j[1], ',d'))
         print("    Title:  '{}'  -  {} views".format(*j))
+
 
 def query2():
     """2. Who are the most popular article authors of all time? That is, when
@@ -75,6 +78,7 @@ def query2():
         j = list(j)
         j[1] = str(format(j[1], ',d'))
         print("    Author:  '{}'  -  {} views".format(*j))
+
 
 def query3():
     """3. On which days did more than 1% of requests lead to errors? The log
@@ -111,9 +115,9 @@ def query3():
 
 if __name__ == '__main__':
     os.system("clear")  # clear console on unix-like systems
-    print("\n-----------------------------------\n"
-        + "-  Logs Analysis - Robin Edmunds  -\n"
-        + "-----------------------------------\n")
+    print("\n-----------------------------------\n" +
+          "-  Logs Analysis - Robin Edmunds  -\n" +
+          "-----------------------------------\n")
     query1()
     print("\n\n")
     query2()
