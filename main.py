@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #
 # Logs Analysis project - Robin Edmunds 2018
-#
+
 import datetime
 import os
 import psycopg2
@@ -102,7 +102,7 @@ def query3():
 
     for i, j in enumerate(response):
         # Convert tuple to list to allow writing. Format "pc" as percentage,
-        # make date readable. Print output.
+        # format date '31 December 2018'. Print output.
         j = list(j)
         j[0] = j[0].strftime("%d %B %Y")
         j[1] = str(format(j[1], '%'))
